@@ -30,6 +30,25 @@ void parse_and_store_tokens(FILE *file, TokenArray *tokenArray, SymbolTable *sym
                 break;
             case TOKEN_SEMICOLON:
                 break;
+            case TOKEN_DISPLAY:
+                token = get_next_token(file);
+                if (token.type == TOKEN_INT || token.type == TOKEN_FLOAT || token.type == TOKEN_IDENTIFIER) {
+                    if (token.type == TOKEN_IDENTIFIER) {
+                        double value = get_variable_value(symbolTable, token.value);
+                        printf("%f\n", value);
+                    } else {
+                        printf("%s\n", token.value);
+                    }
+                    token = get_next_token(file);
+                    if (token.type != TOKEN_SEMICOLON) {
+                        fprintf(stderr, "Error: Missing semicolon after display on line %d\n", line_number);
+                        exit(1);
+                    }
+                } else {
+                    fprintf(stderr, "Error: Invalid argument to display on line %d\n", line_number);
+                    exit(1);
+                }
+                break;
             case TOKEN_EOL:
                 line_number++;
                 break;

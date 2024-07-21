@@ -22,13 +22,5 @@ int main(int argc, char *argv[]) {
 
     fclose(file);
 
-    // Print stored tokens and variables (for demonstration)
-    for (int i = 0; i < tokenArray.count; i++) {
-        printf("Token %d: Type %s, Value '%s'\n", i, token_type_to_string(tokenArray.tokens[i].type), tokenArray.tokens[i].value);
-    }
-    for (int i = 0; i < symbolTable.count; i++) {
-        printf("Variable: %s = %f\n", symbolTable.variables[i].name, symbolTable.variables[i].value);
-    }
-
     return 0;
 }

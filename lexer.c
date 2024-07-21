@@ -43,7 +43,11 @@ Token get_next_token(FILE *file) {
         }
         ungetc(c, file);
         token.value[i] = '\0';
-        token.type = TOKEN_IDENTIFIER;
+        if (strcmp(token.value, "display") == 0) {
+            token.type = TOKEN_DISPLAY;
+        } else {
+            token.type = TOKEN_IDENTIFIER;
+        }
     } else if (c == '=') {
         token.type = TOKEN_ASSIGN;
         token.value[0] = c;
