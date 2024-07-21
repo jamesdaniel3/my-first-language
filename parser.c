@@ -3,6 +3,7 @@
 #include "symbol_table.h"
 #include <string.h>
 #include <stdlib.h>
+#include <stdio.h>
 
 void parse_and_store_tokens(FILE *file, TokenArray *tokenArray, SymbolTable *symbolTable) {
     Token token;
@@ -31,21 +32,36 @@ void parse_and_store_tokens(FILE *file, TokenArray *tokenArray, SymbolTable *sym
             case TOKEN_SEMICOLON:
                 break;
             case TOKEN_DISPLAY:
+                // Expect an opening parenthesis
                 token = get_next_token(file);
-                if (token.type == TOKEN_INT || token.type == TOKEN_FLOAT || token.type == TOKEN_IDENTIFIER) {
-                    if (token.type == TOKEN_IDENTIFIER) {
-                        double value = get_variable_value(symbolTable, token.value);
-                        printf("%f\n", value);
-                    } else {
-                        printf("%s\n", token.value);
-                    }
-                    token = get_next_token(file);
-                    if (token.type != TOKEN_SEMICOLON) {
-                        fprintf(stderr, "Error: Missing semicolon after display on line %d\n", line_number);
-                        exit(1);
-                    }
+                if (token.type != TOKEN_LPAREN) {
+                    fprintf(stderr, "Error: Expected '(' after 'display' on line %d\n", line_number);
+                    exit(1);
+                }
+                
+                // Get the argument
+                token = get_next_token(file);
+                if (token.type == TOKEN_IDENTIFIER) {
+                    double value = get_variable_value(symbolTable, token.value);
+                    printf("%f\n", value);
+                } else if (token.type == TOKEN_INT || token.type == TOKEN_FLOAT) {
+                    printf("%s\n", token.value);
                 } else {
                     fprintf(stderr, "Error: Invalid argument to display on line %d\n", line_number);
+                    exit(1);
+                }
+                
+                // Expect a closing parenthesis
+                token = get_next_token(file);
+                if (token.type != TOKEN_RPAREN) {
+                    fprintf(stderr, "Error: Expected ')' after display argument on line %d\n", line_number);
+                    exit(1);
+                }
+                
+                // Expect a semicolon
+                token = get_next_token(file);
+                if (token.type != TOKEN_SEMICOLON) {
+                    fprintf(stderr, "Error: Missing semicolon after display statement on line %d\n", line_number);
                     exit(1);
                 }
                 break;

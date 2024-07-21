@@ -16,7 +16,9 @@ typedef enum {
     TOKEN_EOF,
     TOKEN_IDENTIFIER,
     TOKEN_ASSIGN,
-    TOKEN_DISPLAY
+    TOKEN_DISPLAY,
+    TOKEN_LPAREN,  
+    TOKEN_RPAREN  
 } TokenType;
 
 typedef struct {

@@ -1,9 +1,5 @@
 #include "lexer.h"
 #include "helpers.h"
-#include "lexer.h"
-#include "helpers.h"
-#include <stdio.h>
-#include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
 
@@ -54,6 +50,14 @@ Token get_next_token(FILE *file) {
         token.value[1] = '\0';
     } else if (c == ';') {
         token.type = TOKEN_SEMICOLON;
+        token.value[0] = c;
+        token.value[1] = '\0';
+    } else if (c == '(') { 
+        token.type = TOKEN_LPAREN;
+        token.value[0] = c;
+        token.value[1] = '\0';
+    } else if (c == ')') {  
+        token.type = TOKEN_RPAREN;
         token.value[0] = c;
         token.value[1] = '\0';
     } else {
